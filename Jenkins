@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    environment {
+        AWS_REGION = 'ap-south-1'           // Replace with your desired region
+        STACK_NAME = 'JenkinsCFT'
+        TEMPLATE_FILE = 'cloudformation.yaml'    // Path to your CloudFormation template
+        AWS_CREDENTIALS_ID = '764a34d6-357d-4fdb-9c3e-fe8925968a89' // Replace with the ID of your AWS credentials in Jenkins
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Pull the CloudFormation template from source control
+                checkout scm
+            }
+        }
+        stage('Validate Template') {
+            steps {
+                withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
+                    sh """
+                    aws cloudformation validate-template \
+                        --template-body file://${TEMPLATE_FILE}
+                    """
+                }
+            }
+        }
+        stage('Deploy Stack') {
+            steps {
+                withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
+                    sh """
+                    aws cloudformation deploy \
+                        --stack-name ${STACK_NAME} \
+                        --template-file ${TEMPLATE_FILE} \
+                        --capabilities CAPABILITY_NAMED_IAM
+                    """
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'CloudFormation stack deployed successfully.'
+        }
+        failure {
+            echo 'CloudFormation stack deployment failed.'
+        }
+    }
+}
