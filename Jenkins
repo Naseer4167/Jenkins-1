@@ -8,12 +8,11 @@ pipeline {
     }
      
     stages {
-        stages {
         stage('Cleanup Workspace') {
             steps{
                  cleanWs()
             }
-        } }
+        } 
         stage('Setup parameters') {
             steps { 
                 script {
