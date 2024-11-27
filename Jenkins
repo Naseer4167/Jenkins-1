@@ -6,6 +6,35 @@ pipeline {
         TEMPLATE_FILE = 'cloudformation.yaml' // Path to your CloudFormation template
         AWS_CREDENTIALS_ID = '764a34d6-357d-4fdb-9c3e-fe8925968a89' // Jenkins credential ID for AWS
     }
+     stage('Setup parameters') {
+            steps { 
+                script {
+                    properties([
+                        parameters([
+                            choice(
+                                choices: ['CREATE','UPDATE'],
+                                name: 'OUOperation',
+                                description: "Select OU Operation To Create or Update"
+                            ),
+                            choice(
+                                choices: ['I AM NOT AWARE','YES, I HAVE ENSURED PROPER PROCESS IS FOLLOWED'],
+                                name: 'Disclaimer',
+                                description: "Please ensure that proper ITSM process (RFC/CRQ) is followed incase of any activity in regards to the managed CIs/Servers."
+                            ),
+                            string(
+                                description:'Enter CRQ ID',
+                                name:'CRQ ID'
+                            ),
+                            string(
+                                description:'Enter Tag',
+                                name:'TAG'
+                                
+                            )
+                         ])
+                    ])
+                }
+            }
+        }
     stages {
         stage('Checkout Code') {
             steps {
