@@ -57,7 +57,7 @@ pipeline {
                 }
             }
         }
-        stage('Create/Update Stack') {
+        stage('Create/Update StackSet') {
             steps {
                 withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
                     sh """
