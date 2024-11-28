@@ -65,7 +65,7 @@ pipeline {
                         --stack-set-name ${STACK_SET_NAME} \
                         --template-body file://${TEMPLATE_FILE} \
                         --capabilities CAPABILITY_NAMED_IAM \
-                        --permission-model service-managed
+                        --permission-model SERVICE_MANAGED
                         
                     """
                 }
