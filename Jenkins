@@ -1,12 +1,9 @@
 pipeline {
     agent any
-      parameters {
-        string(name: 'STACK_SET_NAME', defaultValue: 'MyStackSet-New', description: 'The name of the CloudFormation StackSet')
-        string(name: 'TEMPLATE_FILE', defaultValue: 'cloudformation.yaml', description: 'Path to the CloudFormation template file')
-        //string(name: 'PARAMETERS_FILE', defaultValue: 'parameters.json', description: 'Path to the parameters JSON file')
-        string(name: 'REGION', defaultValue: 'us-east-1', description: 'AWS region to use')
-    }
     environment {
+        AWS_REGION = 'us-east-1' // Change this to your AWS region
+        STACK_NAME = 'MyJenkinsStackName' // Name of your CloudFormation stack
+        TEMPLATE_FILE = 'cloudformation.yaml' // Path to your CloudFormation template
         AWS_CREDENTIALS_ID = '764a34d6-357d-4fdb-9c3e-fe8925968a89' // Jenkins credential ID for AWS
     }
      
@@ -55,22 +52,18 @@ pipeline {
             steps {
                 withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
                     sh """
-                    aws cloudformation validate-template \
-                    --template-body file://${params.TEMPLATE_FILE} \
-                    --region ${params.REGION}
+                    aws cloudformation validate-template --template-body file://${TEMPLATE_FILE}
                     """
                 }
             }
         }
-        stage('Create/Update StackSet') {
+        stage('Create/Update Stack') {
             steps {
                 withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
                     sh """
                     aws cloudformation deploy \
-                        --stack-set-name ${STACK_NAME} \
-                       --template-body file://${params.TEMPLATE_FILE} \
-                        --parameters file://${params.PARAMETERS_FILE} \
-                        --region ${params.REGION} \
+                        --stack-name ${STACK_NAME} \
+                        --template-file ${TEMPLATE_FILE} \
                         --capabilities CAPABILITY_NAMED_IAM
                     """
                 }
