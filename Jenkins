@@ -2,7 +2,7 @@ pipeline {
     agent any
   parameters {
         string(name: 'STACK_SET_NAME', defaultValue: 'MyStackSetNVSGIS', description: 'The name of the CloudFormation StackSet')
-        string(name: 'TEMPLATE_FILE', defaultValue: 'Cloudformation.yaml', description: 'Path to the CloudFormation template file')
+        string(name: 'TEMPLATE_FILE', defaultValue: 'cloudformation.yaml', description: 'Path to the CloudFormation template file')
         //string(name: 'PARAMETERS_FILE', defaultValue: 'parameters.json', description: 'Path to the parameters JSON file')
         string(name: 'REGION', defaultValue: 'us-east-1', description: 'AWS region to use')
     }
