@@ -4,7 +4,7 @@ pipeline {
         string(name: 'STACK_SET_NAME', defaultValue: 'MyStackSetNVSGIS', description: 'The name of the CloudFormation StackSet')
         string(name: 'TEMPLATE_FILE', defaultValue: 'cloudformation.yaml', description: 'Path to the CloudFormation template file')
         //string(name: 'PARAMETERS_FILE', defaultValue: 'parameters.json', description: 'Path to the parameters JSON file')
-        string(name: 'REGION', defaultValue: 'us-east-1', description: 'AWS region to use')
+        //string(name: 'REGION', defaultValue: 'us-east-1', description: 'AWS region to use')
     }
     environment {
         // AWS_REGION = 'us-east-1' // Change this to your AWS region
@@ -56,23 +56,22 @@ pipeline {
         }
         stage('Validate Template') {
             steps {
-                withAWS(credentials: AWS_CREDENTIALS_ID) {
+                withAWS(credentials: AWS_CREDENTIALS_ID, region: 'eu-west-1') {
                     sh """
                      aws cloudformation validate-template \
-                        --template-body file://${params.TEMPLATE_FILE} \
-                        --region ${params.REGION}
+                        --template-body file://${params.TEMPLATE_FILE} 
+                        
                     """
                 }
             }
         }
         stage('Create/Update StackSet') {
             steps {
-                withAWS(credentials: AWS_CREDENTIALS_ID) {
+                withAWS(credentials: AWS_CREDENTIALS_ID, region: 'eu-west-1') {
                     sh """
                     aws cloudformation create-stack-set \
                        --stack-set-name ${params.STACK_SET_NAME} \
                         --template-body file://${params.TEMPLATE_FILE} \
-                        --region ${params.REGION} \
                         --capabilities CAPABILITY_NAMED_IAM
                         
                     """
