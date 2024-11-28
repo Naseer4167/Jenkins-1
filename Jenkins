@@ -61,7 +61,7 @@ pipeline {
             steps {
                 withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
                     sh """
-                    aws cloudformation deploy \
+                    aws cloudformation create-stack-set \
                         --stack-set-name ${STACK_SET_NAME} \
                         --template-body file://${TEMPLATE_FILE} \
                         --capabilities CAPABILITY_NAMED_IAM
