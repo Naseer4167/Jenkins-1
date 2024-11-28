@@ -19,6 +19,16 @@ pipeline {
                  cleanWs()
             }
         } 
+         stage('check version') {
+      steps {
+        ansiColor('xterm') {
+          container("jenkins-agent") {
+            sh 'aws --version'
+            sh 'aws sts get-caller-identity'
+          }
+        }
+      }
+    }
         stage('Setup parameters') {
             steps { 
                 script {
