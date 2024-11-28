@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         AWS_REGION = 'us-east-1' // Change this to your AWS region
-        STACK_SET_NAME = 'MyJenkinsStackName' // Name of your CloudFormation stack
+        STACK_SET_NAME = 'MyJenkinsStackName01' // Name of your CloudFormation stack
         TEMPLATE_FILE = 'cloudformation.yaml' // Path to your CloudFormation template
         AWS_CREDENTIALS_ID = '764a34d6-357d-4fdb-9c3e-fe8925968a89' // Jenkins credential ID for AWS
     }
