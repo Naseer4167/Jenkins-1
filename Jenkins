@@ -67,7 +67,7 @@ pipeline {
         }
         stage('Create/Update StackSet') {
             steps {
-                withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
+                withAWS(credentials: AWS_CREDENTIALS_ID) {
                     sh """
                     aws cloudformation create-stack-set \
                        --stack-set-name ${params.STACK_SET_NAME} \
