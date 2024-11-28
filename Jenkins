@@ -62,7 +62,7 @@ pipeline {
                 withAWS(credentials: AWS_CREDENTIALS_ID, region: AWS_REGION) {
                     sh """
                     aws cloudformation deploy \
-                        --stack-set-name ${STACK_NAME} \
+                        --stack-set-name ${STACK_SET_NAME} \
                         --template-file ${TEMPLATE_FILE} \
                         --capabilities CAPABILITY_NAMED_IAM
                     """
